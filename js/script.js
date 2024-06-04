@@ -15,12 +15,42 @@ async function readPosts() {
             postArea.innerHTML += postHtml;
         }
 
-
     } else {
         postArea.innerHTML = 'Nennhum post para exibir'
     }
 
 }
 
+async function addNewPost(title, body) {
+    await fetch(
+        'https://jsonplaceholder.typicode.com/posts',
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                title,
+                body,
+                userId: 2
+            })
+        }
+    );
 
+    document.querySelector('#titleField').value = '';
+    document.querySelector('#bodyField').value = '';
+
+    readPosts();
+}
+
+document.querySelector('#insertButton').addEventListener('click', () => {
+    let title = document.querySelector('#titleField').value;
+    let body = document.querySelector('#bodyField').value;
+
+    if(title && body) {
+        addNewPost(title,body);
+    } else {
+        alert("Preencha todos os campos.")
+    }
+});
 readPosts()
